@@ -17,6 +17,7 @@
 | `cyberpunk` | 네온 광원, 그리드, 스캔라인, 글리치 타이포그래피 |
 | `retro-pixel` | 선명한 8비트 테두리, 아케이드 색상, 블록형 막대 |
 | `minimal-dark` | 절제된 글라스 표면과 은은한 포인트 조명 |
+| `terminal` | 터미널 창 크롬, 고정폭 본문, 깜빡이는 프롬프트 캐럿 |
 
 테마 사용 예시:
 
@@ -24,6 +25,7 @@
 /api/card?username=octocat&theme=cyberpunk
 /api/card?username=octocat&theme=retro-pixel&animation=false
 /api/card?username=octocat&theme=minimal-dark&show_langs=false
+/api/card?username=octocat&theme=terminal
 /api/card?username=octocat&bg_color=101828&text_color=f8fafc&border_radius=8
 ```
 
@@ -34,7 +36,7 @@
 | 매개변수 | 필수 | 기본값 | 허용 값 |
 | --- | --- | --- | --- |
 | `username` | 예 | — | 유효한 GitHub 사용자 이름 |
-| `theme` | 아니요 | `3d-card` | `3d-card`, `cyberpunk`, `retro-pixel`, `minimal-dark` |
+| `theme` | 아니요 | `3d-card` | `3d-card`, `cyberpunk`, `retro-pixel`, `minimal-dark`, `terminal` |
 | `show_langs` | 아니요 | `true` | 불리언 |
 | `border_radius` | 아니요 | `14` | 0–20 사이의 정수 |
 | `bg_color` | 아니요 | 테마 기본값 | `#` 포함 여부와 관계없는 3자리 또는 6자리 16진수 |

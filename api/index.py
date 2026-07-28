@@ -44,7 +44,9 @@ async def root() -> dict[str, str]:
 @app.get("/api/badge", response_class=Response, include_in_schema=False)
 async def card(
     username: str = Query(..., min_length=1, max_length=39),
-    theme: str = Query("3d-card", pattern="^(3d-card|cyberpunk|retro-pixel|minimal-dark)$"),
+    theme: str = Query(
+        "3d-card", pattern="^(3d-card|cyberpunk|retro-pixel|minimal-dark|terminal)$"
+    ),
     show_langs: bool = True,
     border_radius: int = Query(14, ge=0, le=20),
     bg_color: str | None = Query(None, pattern="^#?[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$"),

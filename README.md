@@ -17,6 +17,7 @@ canvas, or heavyweight rendering runtime required.
 | `cyberpunk` | Neon glow, grid, scanlines, glitch typography |
 | `retro-pixel` | Crisp 8-bit borders, arcade colors, blocky bars |
 | `minimal-dark` | Restrained glass surface and soft accent lighting |
+| `terminal` | Window chrome, monospace body, blinking prompt caret |
 
 Try a theme:
 
@@ -24,6 +25,7 @@ Try a theme:
 /api/card?username=octocat&theme=cyberpunk
 /api/card?username=octocat&theme=retro-pixel&animation=false
 /api/card?username=octocat&theme=minimal-dark&show_langs=false
+/api/card?username=octocat&theme=terminal
 /api/card?username=octocat&bg_color=101828&text_color=f8fafc&border_radius=8
 ```
 
@@ -34,7 +36,7 @@ Try a theme:
 | Parameter | Required | Default | Values |
 | --- | --- | --- | --- |
 | `username` | yes | — | Valid GitHub login |
-| `theme` | no | `3d-card` | `3d-card`, `cyberpunk`, `retro-pixel`, `minimal-dark` |
+| `theme` | no | `3d-card` | `3d-card`, `cyberpunk`, `retro-pixel`, `minimal-dark`, `terminal` |
 | `show_langs` | no | `true` | Boolean |
 | `border_radius` | no | `14` | Integer, 0–20 |
 | `bg_color` | no | theme | 3- or 6-digit hex, with or without `#` |
