@@ -95,6 +95,11 @@ src/utils/                Escaping, formatting, color helpers
 tests/                    API, parser, and renderer tests
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, the checks to run before
+opening a pull request, and the steps for adding a theme.
+
 ## License
 
 MIT

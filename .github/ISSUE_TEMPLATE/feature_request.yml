@@ -1,0 +1,50 @@
+name: Feature request
+description: Propose a new theme, query parameter, or capability.
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - New theme
+        - New query parameter
+        - GitHub data or GraphQL query
+        - Caching or performance
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is hard or impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: |
+        For a new parameter, give the name, type, default, and accepted values.
+        For a new theme, describe the visual character in a sentence.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: This can be rendered as native SVG, with no browser or canvas runtime
+          required: true

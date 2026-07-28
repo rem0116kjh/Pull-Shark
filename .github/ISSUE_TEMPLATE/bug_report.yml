@@ -1,0 +1,55 @@
+name: Bug report
+description: A card renders incorrectly, or the API returns the wrong response.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste a `GITHUB_TOKEN` into an issue. If you think a token was
+        exposed, rotate it first.
+
+  - type: input
+    id: card-url
+    attributes:
+      label: Card URL
+      description: The full request URL that reproduces the problem.
+      placeholder: /api/card?username=octocat&theme=cyberpunk&animation=false
+    validations:
+      required: true
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options:
+        - 3d-card
+        - cyberpunk
+        - retro-pixel
+        - minimal-dark
+        - not theme specific
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include the HTTP status and any `X-Git-Stats-Source` header value.
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Local uvicorn, Vercel deployment, or something else. Include the Python version for local runs.
+      placeholder: Vercel, or local uvicorn on Python 3.11
+    validations:
+      required: false
