@@ -30,6 +30,22 @@ def test_terminal_theme_renders_window_chrome_and_prompt():
 
 
 @pytest.mark.parametrize("theme", RENDERERS)
+def test_card_width_drives_svg_width_and_language_bar(theme):
+    stats = GitHubClient.mock_stats("octocat")
+    svg = RENDERERS[theme].render(stats, RenderOptions(card_width=900))
+    assert 'width="900"' in svg
+    assert 'viewBox="0 0 900 410"' in svg
+    # Language bar spans the content area: 900 - 42 * 2.
+    assert 'width="816" height="10"' in svg
+
+
+@pytest.mark.parametrize("theme", RENDERERS)
+def test_default_width_still_renders_at_760(theme):
+    svg = RENDERERS[theme].render(GitHubClient.mock_stats("octocat"), RenderOptions())
+    assert 'width="760"' in svg
+
+
+@pytest.mark.parametrize("theme", RENDERERS)
 def test_animation_can_be_disabled(theme):
     stats = GitHubClient.mock_stats("octocat")
     svg = RENDERERS[theme].render(stats, RenderOptions(animation=False))

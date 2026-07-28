@@ -14,7 +14,9 @@ class MinimalDarkRenderer(BaseRenderer):
             if options.animation
             else ""
         )
-        langs = self.languages(stats, text, mix(bg, "#ffffff", .1)) if options.show_langs else ""
+        langs = (
+            self.languages(stats, text, mix(bg, "#ffffff", 0.1), width) if options.show_langs else ""
+        )
         return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"
           viewBox="0 0 {width} {height}" role="img" aria-label="GitHub stats for {xml_escape(stats.username)}">
           <defs>
@@ -24,12 +26,12 @@ class MinimalDarkRenderer(BaseRenderer):
             {self.base_style()}<style>{animation}</style>
           </defs>
           <rect width="{width}" height="{height}" rx="{options.border_radius}" fill="{bg}"/>
-          <circle class="orb" cx="690" cy="20" r="190" fill="url(#orb)"/>
+          <circle class="orb" cx="{width - 70}" cy="20" r="190" fill="url(#orb)"/>
           <rect x=".75" y=".75" width="{width - 1.5}" height="{height - 1.5}" rx="{options.border_radius}"
             fill="url(#glass)" stroke="#fff" stroke-opacity=".12" stroke-width="1.5"/>
           {self.identity(stats, text, accent)}
-          <path d="M42 148H718" stroke="#fff" stroke-opacity=".08"/>
-          {self.stats_grid(stats, text, accent)}
+          <path d="M42 148H{width - 42}" stroke="#fff" stroke-opacity=".08"/>
+          {self.stats_grid(stats, text, accent, width)}
           {langs}
-          <text x="718" y="{height - 24}" text-anchor="end" class="label" fill="{text}" opacity=".25">GITHUB PROFILE</text>
+          <text x="{width - 42}" y="{height - 24}" text-anchor="end" class="label" fill="{text}" opacity=".25">GITHUB PROFILE</text>
         </svg>"""

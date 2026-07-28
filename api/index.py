@@ -8,7 +8,13 @@ from src.cache import AsyncTTLCache
 from src.config import get_settings
 from src.github_client import GitHubAPIError, GitHubClient, RateLimitError, UserNotFoundError
 from src.models import UserStats
-from src.renderers import RENDERERS, RenderOptions
+from src.renderers import (
+    DEFAULT_CARD_WIDTH,
+    MAX_CARD_WIDTH,
+    MIN_CARD_WIDTH,
+    RENDERERS,
+    RenderOptions,
+)
 
 settings = get_settings()
 client = GitHubClient(settings)
@@ -52,6 +58,7 @@ async def card(
     bg_color: str | None = Query(None, pattern="^#?[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$"),
     text_color: str | None = Query(None, pattern="^#?[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$"),
     animation: bool = True,
+    card_width: int = Query(DEFAULT_CARD_WIDTH, ge=MIN_CARD_WIDTH, le=MAX_CARD_WIDTH),
 ) -> Response:
     username = username.strip()
     if not USERNAME_RE.fullmatch(username):
@@ -67,6 +74,7 @@ async def card(
             bg_color=bg_color,
             text_color=text_color,
             animation=animation,
+            card_width=card_width,
         )
         svg = RENDERERS[theme].render(stats, options)
         headers = {

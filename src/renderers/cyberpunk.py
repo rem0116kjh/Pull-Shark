@@ -14,7 +14,7 @@ class CyberpunkRenderer(BaseRenderer):
             if options.animation
             else ""
         )
-        langs = self.languages(stats, text, "#18203b") if options.show_langs else ""
+        langs = self.languages(stats, text, "#18203b", width) if options.show_langs else ""
         return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"
           viewBox="0 0 {width} {height}" role="img" aria-label="GitHub stats for {xml_escape(stats.username)}">
           <defs>
@@ -33,13 +33,13 @@ class CyberpunkRenderer(BaseRenderer):
           <rect width="{width}" height="{height}" rx="{options.border_radius}" fill="{bg}"/>
           <rect width="{width}" height="{height}" rx="{options.border_radius}" fill="url(#grid)"/>
           <g class="frame">
-            <path d="M20 2H700l58 58v{height - 80}l-20 20H2V20z" fill="none"
+            <path d="M20 2H{width - 60}l58 58v{height - 80}l-20 20H2V20z" fill="none"
               stroke="{accent}" stroke-width="2" filter="url(#glow)"/>
-            <path d="M2 140h20l12 12h692l12-12h20" stroke="#ff2bd6" fill="none" opacity=".8"/>
+            <path d="M2 140h20l12 12h{width - 68}l12-12h20" stroke="#ff2bd6" fill="none" opacity=".8"/>
           </g>
           {self.identity(stats, text, accent)}
-          {self.stats_grid(stats, text, "#ff2bd6")}
+          {self.stats_grid(stats, text, "#ff2bd6", width)}
           {langs}
           <rect width="{width}" height="{height}" rx="{options.border_radius}" fill="url(#scan)" pointer-events="none"/>
-          <text x="718" y="{height - 22}" text-anchor="end" class="label" fill="{accent}">SYS::GITHUB//STATS</text>
+          <text x="{width - 42}" y="{height - 22}" text-anchor="end" class="label" fill="{accent}">SYS::GITHUB//STATS</text>
         </svg>"""

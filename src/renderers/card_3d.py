@@ -15,7 +15,12 @@ class Card3DRenderer(BaseRenderer):
             if options.animation
             else ""
         )
-        langs = self.languages(stats, text, mix(bg, "#ffffff", 0.12)) if options.show_langs else ""
+        langs = (
+            self.languages(stats, text, mix(bg, "#ffffff", 0.12), width)
+            if options.show_langs
+            else ""
+        )
+        panel = width - 42
         return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"
           viewBox="0 0 {width} {height}" role="img" aria-label="GitHub stats for {xml_escape(stats.username)}">
           <defs>
@@ -30,14 +35,14 @@ class Card3DRenderer(BaseRenderer):
             {self.base_style()}<style>{animate}</style>
           </defs>
           <g class="card">
-            <path d="M28 22h688q20 0 20 20v{height - 57}q0 20-20 20H28z" fill="{edge}" opacity=".8"/>
-            <rect x="18" y="12" width="718" height="{height - 34}" rx="{options.border_radius}"
+            <path d="M28 22h{width - 72}q20 0 20 20v{height - 57}q0 20-20 20H28z" fill="{edge}" opacity=".8"/>
+            <rect x="18" y="12" width="{panel}" height="{height - 34}" rx="{options.border_radius}"
               fill="url(#surface)" stroke="url(#shine)" stroke-width="1.5" filter="url(#shadow)"/>
-            <path d="M{18 + options.border_radius} 13h{718 - options.border_radius * 2}"
+            <path d="M{18 + options.border_radius} 13h{panel - options.border_radius * 2}"
               stroke="white" opacity=".12"/>
             {self.identity(stats, text, accent)}
-            {self.stats_grid(stats, text, accent)}
+            {self.stats_grid(stats, text, accent, width)}
             {langs}
-            <text x="718" y="{height - 25}" text-anchor="end" class="label" fill="{text}" opacity=".28">GIT-STATS-CARD</text>
+            <text x="{panel}" y="{height - 25}" text-anchor="end" class="label" fill="{text}" opacity=".28">GIT-STATS-CARD</text>
           </g>
         </svg>"""

@@ -19,7 +19,11 @@ class TerminalRenderer(BaseRenderer):
             if options.animation
             else ""
         )
-        langs = self.languages(stats, text, mix(bg, "#ffffff", 0.12)) if options.show_langs else ""
+        langs = (
+            self.languages(stats, text, mix(bg, "#ffffff", 0.12), width)
+            if options.show_langs
+            else ""
+        )
         title = xml_escape(f"{truncate(stats.username, 24)}@github: ~/stats")
         return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"
           viewBox="0 0 {width} {height}" role="img"
@@ -44,8 +48,8 @@ class TerminalRenderer(BaseRenderer):
           </g>
           <path d="M0 {TITLE_BAR_HEIGHT}H{width}" stroke="#fff" stroke-opacity=".1"/>
           {self.identity(stats, text, accent)}
-          <path d="M42 148H718" stroke="#fff" stroke-opacity=".08"/>
-          {self.stats_grid(stats, text, accent)}
+          <path d="M42 148H{width - 42}" stroke="#fff" stroke-opacity=".08"/>
+          {self.stats_grid(stats, text, accent, width)}
           {langs}
           <text x="42" y="{height - 20}" class="prompt" fill="{accent}">$ gh stats --user {xml_escape(truncate(stats.username, 20))}</text>
           <rect class="caret" x="220" y="{height - 31}" width="8" height="14"

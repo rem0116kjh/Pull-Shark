@@ -15,6 +15,11 @@ def safe_id(value: str) -> str:
     return re.sub(r"[^a-zA-Z0-9_-]", "-", value)
 
 
+def coord(value: float) -> str:
+    """Render an SVG coordinate without a trailing ``.0`` on whole numbers."""
+    return f"{value:.1f}".rstrip("0").rstrip(".")
+
+
 def format_number(value: int) -> str:
     if value < 1_000:
         return str(value)
