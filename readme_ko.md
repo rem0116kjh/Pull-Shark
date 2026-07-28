@@ -96,6 +96,11 @@ src/utils/                이스케이프, 형식화, 색상 유틸리티
 tests/                    API, 파서 및 렌더러 테스트
 ```
 
+## 기여
+
+로컬 설정, 풀 리퀘스트 전 실행할 검사, 테마 추가 절차는
+[CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요.
+
 ## 라이선스
 
 MIT
