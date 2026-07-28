@@ -30,10 +30,19 @@ def test_query_validation():
         "/api/card?username=octocat&border_radius=99",
         "/api/card?username=octocat&theme=unknown",
         "/api/badge?username=octocat&bg_color=nope",
+        "/api/card?username=octocat&card_width=599",
+        "/api/card?username=octocat&card_width=1001",
     ):
         response = client.get(url)
         assert response.status_code == 422
         assert response.headers["content-type"].startswith("image/svg+xml")
+
+
+def test_card_width_is_applied_at_the_boundaries():
+    for width in (600, 1000):
+        response = client.get(f"/api/card?username=octocat&card_width={width}")
+        assert response.status_code == 200
+        assert f'width="{width}"' in response.text
 
 
 def test_unhandled_card_error_is_svg(monkeypatch):

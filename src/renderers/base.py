@@ -2,7 +2,15 @@ from dataclasses import dataclass
 
 from src.models import UserStats
 from src.utils.color import normalize_hex
-from src.utils.svg_helpers import format_number, truncate, xml_escape
+from src.utils.svg_helpers import coord, format_number, truncate, xml_escape
+
+
+DEFAULT_CARD_WIDTH = 760
+MIN_CARD_WIDTH = 600
+MAX_CARD_WIDTH = 1000
+CONTENT_MARGIN = 42
+STATS_COLUMN_STEP = 232
+LANGUAGE_LABEL_STEP = 169
 
 
 @dataclass(frozen=True, slots=True)
@@ -12,10 +20,11 @@ class RenderOptions:
     bg_color: str | None = None
     text_color: str | None = None
     animation: bool = True
+    card_width: int = DEFAULT_CARD_WIDTH
 
 
 class BaseRenderer:
-    width = 760
+    width = DEFAULT_CARD_WIDTH
 
     def colors(
         self, options: RenderOptions, default_bg: str, default_text: str
@@ -26,7 +35,21 @@ class BaseRenderer:
         )
 
     def dimensions(self, options: RenderOptions) -> tuple[int, int]:
-        return self.width, 410 if options.show_langs else 315
+        return options.card_width, 410 if options.show_langs else 315
+
+    @staticmethod
+    def content_width(width: int) -> int:
+        """Drawable width between the left and right margins."""
+        return width - CONTENT_MARGIN * 2
+
+    @classmethod
+    def scaled(cls, value: float, width: int) -> float:
+        """Scale a coordinate authored at DEFAULT_CARD_WIDTH to the actual card width.
+
+        Interior spacing stretches with the card; edge insets do not, so callers
+        express right-edge positions as ``width - inset`` instead.
+        """
+        return value * cls.content_width(width) / cls.content_width(DEFAULT_CARD_WIDTH)
 
     def identity(self, stats: UserStats, text: str, accent: str) -> str:
         initial = xml_escape((stats.name or stats.username or "?")[0].upper())
@@ -41,7 +64,9 @@ class BaseRenderer:
         <text x="140" y="126" class="bio" fill="{text}" opacity=".68">{xml_escape(truncate(stats.bio, 66))}</text>
         """
 
-    def stats_grid(self, stats: UserStats, text: str, accent: str) -> str:
+    def stats_grid(
+        self, stats: UserStats, text: str, accent: str, width: int = DEFAULT_CARD_WIDTH
+    ) -> str:
         values = [
             ("COMMITS", stats.total_commits),
             ("PULL REQUESTS", stats.pull_requests),
@@ -50,38 +75,44 @@ class BaseRenderer:
             ("REPOS", stats.contributed_repos),
             ("FOLLOWERS", stats.followers),
         ]
+        step = self.scaled(STATS_COLUMN_STEP, width)
         cells = []
         for index, (label, value) in enumerate(values):
-            x = 42 + (index % 3) * 232
+            x = CONTENT_MARGIN + (index % 3) * step
             y = 175 + (index // 3) * 70
             cells.append(
-                f'<text x="{x}" y="{y}" class="value" fill="{text}">{format_number(value)}</text>'
-                f'<text x="{x}" y="{y + 23}" class="label" fill="{accent}">{label}</text>'
+                f'<text x="{coord(x)}" y="{y}" class="value" fill="{text}">'
+                f"{format_number(value)}</text>"
+                f'<text x="{coord(x)}" y="{y + 23}" class="label" fill="{accent}">{label}</text>'
             )
         return "".join(cells)
 
-    def languages(self, stats: UserStats, text: str, bar_bg: str) -> str:
+    def languages(
+        self, stats: UserStats, text: str, bar_bg: str, width: int = DEFAULT_CARD_WIDTH
+    ) -> str:
         if not stats.languages:
             return ""
-        x, width = 42, 676
+        x, bar_width = CONTENT_MARGIN, self.content_width(width)
+        label_step = self.scaled(LANGUAGE_LABEL_STEP, width)
         segments, labels, cursor = [], [], x
         for index, lang in enumerate(stats.languages):
-            segment_width = width * lang.percentage / 100
+            segment_width = bar_width * lang.percentage / 100
             segments.append(
                 f'<rect x="{cursor:.1f}" y="326" width="{segment_width + .5:.1f}" '
                 f'height="10" fill="{lang.color or "#8b949e"}"/>'
             )
             if index < 4:
-                label_x = x + index * 169
+                label_x = x + index * label_step
                 labels.append(
-                    f'<circle cx="{label_x + 5}" cy="363" r="5" fill="{lang.color or "#8b949e"}"/>'
-                    f'<text x="{label_x + 17}" y="368" class="lang" fill="{text}">'
-                    f'{xml_escape(truncate(lang.name, 12))} {lang.percentage:.1f}%</text>'
+                    f'<circle cx="{coord(label_x + 5)}" cy="363" r="5" '
+                    f'fill="{lang.color or "#8b949e"}"/>'
+                    f'<text x="{coord(label_x + 17)}" y="368" class="lang" fill="{text}">'
+                    f"{xml_escape(truncate(lang.name, 12))} {lang.percentage:.1f}%</text>"
                 )
             cursor += segment_width
         return (
-            f'<text x="42" y="310" class="section" fill="{text}">PRIMARY LANGUAGES</text>'
-            f'<rect x="{x}" y="326" width="{width}" height="10" rx="5" fill="{bar_bg}"/>'
+            f'<text x="{x}" y="310" class="section" fill="{text}">PRIMARY LANGUAGES</text>'
+            f'<rect x="{x}" y="326" width="{bar_width}" height="10" rx="5" fill="{bar_bg}"/>'
             + "".join(segments)
             + "".join(labels)
         )

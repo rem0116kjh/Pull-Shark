@@ -25,7 +25,7 @@ Try a theme:
 /api/card?username=octocat&theme=cyberpunk
 /api/card?username=octocat&theme=retro-pixel&animation=false
 /api/card?username=octocat&theme=minimal-dark&show_langs=false
-/api/card?username=octocat&theme=terminal
+/api/card?username=octocat&theme=terminal&card_width=900
 /api/card?username=octocat&bg_color=101828&text_color=f8fafc&border_radius=8
 ```
 
@@ -42,6 +42,7 @@ Try a theme:
 | `bg_color` | no | theme | 3- or 6-digit hex, with or without `#` |
 | `text_color` | no | theme | 3- or 6-digit hex, with or without `#` |
 | `animation` | no | `true` | Boolean |
+| `card_width` | no | `760` | Integer, 600–1000 |
 
 Cards return `image/svg+xml` with a four-hour CDN cache and a one-day
 stale-while-revalidate window. `GET /health` returns service health.

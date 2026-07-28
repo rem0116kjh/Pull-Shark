@@ -25,7 +25,7 @@
 /api/card?username=octocat&theme=cyberpunk
 /api/card?username=octocat&theme=retro-pixel&animation=false
 /api/card?username=octocat&theme=minimal-dark&show_langs=false
-/api/card?username=octocat&theme=terminal
+/api/card?username=octocat&theme=terminal&card_width=900
 /api/card?username=octocat&bg_color=101828&text_color=f8fafc&border_radius=8
 ```
 
@@ -42,6 +42,7 @@
 | `bg_color` | 아니요 | 테마 기본값 | `#` 포함 여부와 관계없는 3자리 또는 6자리 16진수 |
 | `text_color` | 아니요 | 테마 기본값 | `#` 포함 여부와 관계없는 3자리 또는 6자리 16진수 |
 | `animation` | 아니요 | `true` | 불리언 |
+| `card_width` | 아니요 | `760` | 600–1000 사이의 정수 |
 
 카드는 `image/svg+xml` 형식으로 반환되며 CDN 캐시는 4시간,
 stale-while-revalidate 기간은 1일입니다. `GET /health`에서 서비스 상태를
